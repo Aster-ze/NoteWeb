@@ -1,0 +1,143 @@
+{
+  "translation": {
+    "siteName": "PMGOO",
+    "searchPlaceholder": "Enter keywords to search...",
+    "changeQuote": "Change Quote",
+    "descriptionFallback": "Use userscripts to freely change the web",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "toggle": "Toggle Theme"
+    },
+    "language": {
+      "en": "English",
+      "zh": "中文",
+      "switch": "Switch Language"
+    },
+    "settings": {
+      "title": "Settings",
+      "preferences": "Preferences",
+      "categories": "Categories",
+      "links": "Links",
+      "themeLabel": "Theme",
+      "themeDescription": "Customize interface appearance",
+      "languageLabel": "Language",
+      "languageDescription": "Switch display language",
+      "wallpaper": "Wallpaper",
+      "backgroundType": "Custom Background",
+      "backgroundTypeDesc": "Enable or disable custom wallpaper",
+      "wallpaperSource": "Image Source",
+      "wallpaperSourceDesc": "Choose network URL or local image",
+      "wallpaperContent": "Set Image",
+      "wallpaperContentDesc": "Enter URL or upload file",
+      "solidColor": "Solid Color",
+      "customWallpaper": "Custom",
+      "enable": "On",
+      "disable": "Off",
+      "chooseFile": "Choose Image...",
+      "imageUrl": "Image URL",
+      "localImage": "Local Upload",
+      "blur": "Blur",
+      "blurDesc": "Adjust background blur intensity",
+      "apply": "Apply",
+      "uploadTip": "Click or drag to upload (Max 10MB)",
+      "wallpaperSizeError": "Image size exceeds 10MB, please use smaller image or URL"
+    },
+    "categories": {
+      "all": "All",
+      "ai": "AI Tools",
+      "news": "News",
+      "community": "Community",
+      "dev": "Dev Tools",
+      "software": "Software",
+      "tools": "Tools",
+      "learn": "Learn",
+      "design": "Design"
+    },
+    "engines": {
+      "google": "Google",
+      "bing": "Bing",
+      "baidu": "Baidu",
+      "duckduckgo": "DuckDuckGo",
+      "github": "GitHub",
+      "stackoverflow": "Stack Overflow",
+      "translate": "Translation Tool"
+    },
+    "toast": {
+      "settingsSaved": "Settings saved",
+      "settingsReset": "Settings reset",
+      "wallpaperUpdated": "Wallpaper updated",
+      "wallpaperReset": "Wallpaper reset",
+      "uploadSuccess": "Upload successful",
+      "uploadError": "Upload failed",
+      "themeChanged": "Theme changed to {{theme}}",
+      "languageChanged": "Language changed to {{label}}"
+    },
+    "editor": {
+      "tabs": {
+        "links": "Links",
+        "categories": "Categories"
+      },
+      "columns": {
+        "index": "#",
+        "name": "Name",
+        "url": "URL",
+        "category": "Category",
+        "icon": "Icon",
+        "color": "Color",
+        "action": "Action"
+      },
+      "buttons": {
+        "save": "Save Changes",
+        "cancel": "Cancel Changes",
+        "export": "Export JSON",
+        "reset": "Factory Reset",
+        "add": "Add Row",
+        "tableMode": "Table Mode",
+        "jsonMode": "Source Mode (JSON)"
+      },
+      "placeholders": {
+        "searchLinks": "Search links...",
+        "searchCategories": "Search categories...",
+        "selectCategory": "Select category...",
+        "selectIcon": "Select icon...",
+        "enterJson": "Paste or edit JSON data here..."
+      },
+      "validation": {
+        "invalidJson": "Invalid JSON format"
+      }
+    },
+    "translate": {
+      "title": "Translation Tool",
+      "subtitle": "Smart Chinese-English Translation",
+      "inputLabel": "Input Text",
+      "inputPlaceholder": "Enter Chinese text to translate...",
+      "outputLabel": "Translation Result",
+      "outputPlaceholder": "Translation will appear here...",
+      "translate": "Translate",
+      "translating": "Translating...",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyError": "Copy failed",
+      "success": "Translation successful",
+      "error": "Translation failed, please try again",
+      "pleaseEnterText": "Please enter text to translate",
+      "tip": "Press Ctrl+Enter for quick translation",
+      "shortcut": "Ctrl+Enter",
+      "characters": "characters",
+      "chineseToEnglish": "Chinese → English",
+      "autoOff": "Auto Translate",
+      "autoOn": "Auto Translate On",
+      "autoTranslateOff": "Auto translation disabled",
+      "autoTranslateOn": "Auto translation enabled"
+    },
+    "common": {
+      "close": "Close",
+      "translatePlaceholder": "Enter text to translate...",
+      "original": "Original",
+      "translation": "Translation",
+      "useTranslation": "Use Translation"
+    }
+  }
+}

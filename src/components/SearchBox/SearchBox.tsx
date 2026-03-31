@@ -1,0 +1,349 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { X, ChevronDown, Github, Languages, ArrowRight, Copy, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../ThemeProvider';
+
+// Icons
+const GoogleIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/>
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+  </svg>
+);
+
+const BingIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 3v18l7-3.5 6 3V7l-6-3-7-1zm12 14.5l-5-2.5V8l5 2.5v7z" fill="#008373"/>
+    <path d="M11 6v10l-4 2V5l4 1z" fill="#008373" fillOpacity="0.6"/>
+  </svg>
+);
+
+const BaiduIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.92 6.51c.36-.61.76-.79 1.18-.54.43.25.46.96.1 1.57-.36.61-.76.79-1.18.54-.43-.25-.46-.96-.1-1.57zm-5.07 1.88c-.5.39-.46 1.07.1 1.54.55.46 1.34.43 1.83.04.5-.39.46-1.07-.1-1.54-.55-.46-1.34-.43-1.83-.04zm3.03 12.06c-3.1.25-5.96-1.68-6.39-4.28-.43-2.6 1.39-4.96 4.49-5.21 3.1-.25 5.96 1.68 6.39 4.28.43 2.6-1.39 4.96-4.49 5.21zm8.39-7.5c-.32.54-.89.64-1.28.25-.39-.39-.39-1.07-.07-1.61.32-.54.89-.64 1.28-.25.39.39.39 1.07.07 1.61zm-2.07-5.57c-.43-.18-.89.11-1.03.64-.14.54.11 1.07.54 1.25.43.18.89-.11 1.03-.64.14-.54-.11-1.07-.54-1.25z" fill="#2932E1"/>
+  </svg>
+);
+
+const DuckDuckGoIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="#DE5833"/>
+    <path d="M12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" fill="#FFFFFF"/>
+  </svg>
+);
+
+const StackOverflowIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.8 16.85l1.35 1.35L12 24l-7.15-5.8 1.35-1.35L11 20.6V0h2v20.6l4.8-3.75z" fill="#F48024"/>
+    <path d="M18.8 11.2l-1.6-1.2-8.8 6.4 1.6 1.2 8.8-6.4zm-11.6 3.6l9.6-4.8.8 1.8-9.6 4.8-.8-1.8zm11.2-8.4l-.4 2-10.6-2 .4-2 10.6 2zM6.4 17.6h11.2v2H6.4v-2z" fill="#BCBBBB"/>
+  </svg>
+);
+
+const ENGINES = [
+  { id: 'google', url: 'https://www.google.com/search?q=', icon: <GoogleIcon />, type: 'search' },
+  { id: 'bing', url: 'https://www.bing.com/search?q=', icon: <BingIcon />, type: 'search' },
+  { id: 'baidu', url: 'https://www.baidu.com/s?wd=', icon: <BaiduIcon />, type: 'search' },
+  { id: 'duckduckgo', url: 'https://duckduckgo.com/?q=', icon: <DuckDuckGoIcon />, type: 'search' },
+  { id: 'github', url: 'https://github.com/search?q=', icon: <Github size={16} />, type: 'search' },
+  { id: 'stackoverflow', url: 'https://stackoverflow.com/search?q=', icon: <StackOverflowIcon />, type: 'search' },
+  { id: 'translate', url: 'translate', icon: <Languages size={16} />, type: 'translate' },
+];
+
+const SearchBox: React.FC = () => {
+  const [query, setQuery] = useState('');
+  const [selectedEngine, setSelectedEngine] = useState(ENGINES[0]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isTranslatePopupOpen, setIsTranslatePopupOpen] = useState(false);
+  const [translatedText, setTranslatedText] = useState('');
+  const [translatedTextZh, setTranslatedTextZh] = useState('');
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [copiedZh, setCopiedZh] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const translatePopupRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+  const { backgroundImage } = useTheme();
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+      if (translatePopupRef.current && !translatePopupRef.current.contains(event.target as Node) && isTranslatePopupOpen) {
+        // Check if the click was on the translation button (to avoid immediate closing when opening)
+        // But since the button has e.stopPropagation(), this might not be strictly necessary if handled correctly
+        // However, the button is inside the form, and the popup is also inside the form?
+        // Let's just rely on stopPropagation in the toggle button
+        setIsTranslatePopupOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isTranslatePopupOpen]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      if (selectedEngine.type === 'translate') {
+        // Don't open new window for translation, just translate
+        handleTranslate(query);
+      } else {
+        window.open(`${selectedEngine.url}${encodeURIComponent(query)}`, '_blank');
+        setQuery(''); // Clear input after search
+      }
+    }
+  };
+
+  const handleTranslate = async (text: string) => {
+    if (!text.trim()) return;
+    
+    setIsTranslating(true);
+    setIsTranslatePopupOpen(true);
+    setTranslatedText('...'); // Show loading placeholder (English)
+    setTranslatedTextZh('...'); // Show loading placeholder (Chinese)
+    
+    try {
+      const [enRes, zhRes] = await Promise.all([
+        fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(text)}`),
+        fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`)
+      ]);
+      const enData = await enRes.json();
+      const zhData = await zhRes.json();
+
+      if (enData && enData[0]) {
+        const enTranslated = enData[0].map((item: any) => item[0]).join('');
+        setTranslatedText(enTranslated);
+      }
+      if (zhData && zhData[0]) {
+        const zhTranslated = zhData[0].map((item: any) => item[0]).join('');
+        setTranslatedTextZh(zhTranslated);
+      }
+      if (!(enData && enData[0]) && !(zhData && zhData[0])) {
+        throw new Error('Translation failed');
+      }
+    } catch (error) {
+      console.error('Translation error:', error);
+      setTranslatedText(t('translate.error') || 'Translation failed');
+      setTranslatedTextZh(t('translate.error') || '翻译失败');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  
+
+  const handleCopyTranslation = async () => {
+    try {
+      await navigator.clipboard.writeText(translatedText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Copy failed:', error);
+    }
+  };
+
+  const handleCopyTranslationZh = async () => {
+    try {
+      await navigator.clipboard.writeText(translatedTextZh);
+      setCopiedZh(true);
+      setTimeout(() => setCopiedZh(false), 2000);
+    } catch (error) {
+      console.error('Copy failed:', error);
+    }
+  };
+
+  const clearSearch = () => {
+    setQuery('');
+  };
+
+  return (
+    <form onSubmit={handleSearch} className="w-full relative z-20">
+      <div className="relative group flex items-center">
+        {/* Search Engine Selector */}
+        <div className="absolute inset-y-0 left-0 flex items-center" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="h-full pl-3 pr-2 flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border-r border-slate-200 dark:border-slate-700 transition-colors z-10"
+          >
+            <div className="flex items-center justify-center w-5 h-5">
+              {selectedEngine.icon}
+            </div>
+            <ChevronDown size={14} className={clsx("transition-transform text-slate-400", isDropdownOpen && "rotate-180")} />
+          </button>
+
+          <AnimatePresence>
+            {isDropdownOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-[#1E1E1E] rounded-xl shadow-xl border border-slate-200/50 dark:border-white/5 overflow-hidden py-1.5 z-50 origin-top-left backdrop-blur-xl"
+              >
+                {ENGINES.map((engine) => (
+                  <button
+                    key={engine.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedEngine(engine);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={clsx(
+                      "w-full px-3 py-2 text-left text-sm transition-colors flex items-center gap-3",
+                      selectedEngine.id === engine.id 
+                        ? "text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-500/10" 
+                        : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                    )}
+                  >
+                    <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
+                      {engine.icon}
+                    </div>
+                    <span className="truncate">{t(`engines.${engine.id}`)}</span>
+                    {selectedEngine.id === engine.id && (
+                       <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
+                    )}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <input
+          type="text"
+          className={clsx(
+            "block w-full pl-20 pr-10 py-3 border rounded-xl text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20",
+            backgroundImage 
+              ? "bg-white/60 dark:bg-black/40 backdrop-blur-md border-white/20 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-600 dark:placeholder-slate-300 focus:bg-white/80 dark:focus:bg-black/60 focus:border-blue-500/50" 
+              : "bg-slate-100 dark:bg-[#1E1E1E] border-transparent text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:bg-white dark:focus:bg-[#1E1E1E] focus:border-blue-500 dark:focus:border-blue-400",
+            selectedEngine.type === 'translate' && "pr-24"
+          )}
+          placeholder={selectedEngine.type === 'translate' ? (t('common.translatePlaceholder') || '输入要翻译的内容...') : t('searchPlaceholder')}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        
+
+        
+        {query && selectedEngine.type !== 'translate' && (
+          <button
+            type="button"
+            onClick={clearSearch}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Translation Popup */}
+      <AnimatePresence>
+        {isTranslatePopupOpen && (
+          <motion.div
+            ref={translatePopupRef}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#1E1E1E] rounded-xl shadow-2xl border border-slate-200/50 dark:border-white/5 overflow-hidden z-[100] backdrop-blur-xl origin-top"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                    <Languages size={18} />
+                  </div>
+                  <h3 className="text-base font-medium text-slate-700 dark:text-slate-200">{t('translate.title') || '翻译工具'}</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsTranslatePopupOpen(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {/* Original Text */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('common.original') || '原文'}</span>
+                  </div>
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+                    <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">{query}</p>
+                  </div>
+                </div>
+
+                {/* Arrow */}
+                <div className="flex justify-center text-slate-300 dark:text-slate-600">
+                  <ArrowRight size={20} className="rotate-90" />
+                </div>
+
+                {/* Translated Text */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">翻译成英文</span>
+                    <button
+                      type="button"
+                      onClick={handleCopyTranslation}
+                      className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      {copied ? <Check size={14} /> : <Copy size={14} />}
+                      <span>{copied ? (t('translate.copied') || '已复制') : (t('translate.copy') || '复制')}</span>
+                    </button>
+                  </div>
+                  <div className="bg-blue-50/50 dark:bg-blue-500/5 rounded-xl p-4 border border-blue-100 dark:border-blue-500/10 min-h-[80px]">
+                    {isTranslating ? (
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+                        <span className="text-sm">{t('translate.translating') || '翻译中...'}</span>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">{translatedText}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Translated Text (Chinese) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">翻译成中文</span>
+                    <button
+                      type="button"
+                      onClick={handleCopyTranslationZh}
+                      className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      {copiedZh ? <Check size={14} /> : <Copy size={14} />}
+                      <span>{copiedZh ? (t('translate.copied') || '已复制') : (t('translate.copy') || '复制')}</span>
+                    </button>
+                  </div>
+                  <div className="bg-blue-50/50 dark:bg-blue-500/5 rounded-xl p-4 border border-blue-100 dark:border-blue-500/10 min-h-[80px]">
+                    {isTranslating ? (
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+                        <span className="text-sm">{t('translate.translating') || '翻译中...'}</span>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">{translatedTextZh}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </form>
+  );
+};
+
+export default SearchBox;
