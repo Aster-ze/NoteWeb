@@ -4,7 +4,6 @@ import NavigationCard from '../components/NavigationCard/NavigationCard';
 import { useData } from '../contexts/DataProvider';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import QuoteDisplay from '../components/QuoteDisplay/QuoteDisplay';
 import { useTranslation } from 'react-i18next';
 import * as LucideIcons from 'lucide-react';
 import { useTheme } from '../components/ThemeProvider';
@@ -62,11 +61,6 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-12">
-        {/* Main Title Section */}
-        <section className="text-center space-y-2 pt-4">
-          <QuoteDisplay />
-        </section>
-        
         {/* Links Sections */}
         <AnimatePresence mode="wait">
           {Object.keys(groupedLinks).length > 0 ? (
